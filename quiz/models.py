@@ -9,22 +9,23 @@ class Eleves(models.Model):
     prenom=models.CharField(max_length=30)
     nom=models.CharField(max_length=30)
 
-class Quiz(models.Model):
-    idProf=models.ForeignKey("Profs")
-    quiz=models.URLField()
-    reponse=models.URLField()
-
-class Profs(models.Model):
-    username=models.CharField(max_length=30)
-    password=models.CharField(max_length=30)
-    nom=models.CharField(max_length=30)
-    prenom=models.CharField(max_length=30)
+class Quizz(models.Model):
+    quizz=models.URLField()
+    correction=models.URLField()
+    date = models.DateField()
 
 class Classes(models.Model):
-    idProf=models.ForeignKey("Profs")
-    identifiant=models.CharField(max_length=20)
+    effectif = models.IntegerField()
+    nom=models.CharField(max_length=20)
 
 class Resultats(models.Model):
-    idQuiz=models.ForeignKey(Quiz)
+    idQuizz=models.ForeignKey(Quizz)
     idEleve=models.ForeignKey(Eleves)
     resultat=models.URLField()
+
+class Tags(models.Model):
+    Tag = models.CharField(max_length= 20)
+
+class QuizzToTag(models.Model):
+    idTag = models.ForeignKey(Tags)
+    idQuizz = models.ForeignKey(Quizz)
