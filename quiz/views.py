@@ -7,5 +7,6 @@ def index(Request):
     fin="aurevoir"
     return HttpResponse(ENTETE+fin)
 
-def nb(Request, n):
-    return HttpResponse(n)
+def nb(request,n):
+    context={'Title':n}
+    return render(request,'quiz/index.html',context)
