@@ -18,13 +18,16 @@ def settings(request):
 
 def login(request):
     if request.POST=={}:
-        return render(request, 'quiz/login.html', {})
-    print(request.POST)
+        L = Classes.objects.raw("SELECT id,Nom FROM quiz_classes")
+        Noms = [i.Nom for i in L]
+        return render(request, 'quiz/login.html', {"noms":Noms})
     user=request.POST['username']
     pswd=request.POST['password']
+    nom = request.POST['last name']
+    prenom =request.POST['first name']
+    classe = request.POST['classe']
     hashed=pbkdf2_sha256.encrypt(pswd, rounds=200000, salt_size=16)
-    classe=Classes(effectif=42,nom="MP")
-    classe.save()
-    eleve=Eleves(idClasse=classe,password=hashed,username=user,nom="NoName",prenom="HeyHo")
+    t = Classes.objects.filter(nom = classe)
+    eleve = Eleves(nom = nom, prenom = prenom, password = hashed, username = user, idClasse = t[0] )
     eleve.save()
-    return HttpResponse("Thanks for signing in")
+    return HttpResponse("Merci de votre inscription")

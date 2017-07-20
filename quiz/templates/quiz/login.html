@@ -7,6 +7,7 @@
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.0/jquery.min.js"></script>
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
     <title>Interrogations</title>
+    <link rel="stylesheet" type="text/css" href="login.css">
 </head>
 <body>
     <nav class="navbar navbar-inverse">
@@ -24,14 +25,26 @@
       </ul>
   </div>
 </nav>
-<form action = "/quiz/login/" method = "post">
+<div id = "LOGIN">
+    <form action = "/quiz/login/" method = "post">
     {% csrf_token %}
-    Nom d'utilisateur :<br>
+    Nom :
+    <input type = "text" name = "last name"><br>
+    Prénom :
+    <input type = "text" name = "first name"><br>
+    Nom d'utilisateur :
     <input type = "text" name = "username"><br>
-    Mot de passe :<br>
+    Mot de passe :
     <input type = "password" name = "password"><br>
-      <input type="submit" value="Submit">
+    Classe : <SELECT name = "classe" >
+    {% for nom in noms %}
+        <OPTION> {{ nom }}
+        {% endfor %}
+    <br>
+    </SELECT>
+    <input type="submit" value="Confirmer"> <br>
 
 </form>
+</div>
 </body>
 </html>
