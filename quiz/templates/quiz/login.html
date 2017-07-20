@@ -24,11 +24,14 @@
       </ul>
   </div>
 </nav>
-<form action = "/login" method = "post">
-    Nom d'utilisateur : <BR>
-    <input type = "text" name = "username">
-    Mot de passe : <BR>
-    <input type = "password" name = "password">
+<form action = "/quiz/login/" method = "post">
+    {% csrf_token %}
+    Nom d'utilisateur :<br>
+    <input type = "text" name = "username"><br>
+    Mot de passe :<br>
+    <input type = "password" name = "password"><br>
+      <input type="submit" value="Submit">
+
 </form>
 </body>
 </html>

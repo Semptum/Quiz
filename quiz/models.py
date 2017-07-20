@@ -4,7 +4,7 @@ from django.db import models
 
 class Eleves(models.Model):
     idClasse=models.ForeignKey("Classes")
-    password=models.CharField(max_length=30)
+    password=models.CharField(max_length=200)
     username=models.CharField(max_length=30)
     prenom=models.CharField(max_length=30)
     nom=models.CharField(max_length=30)
