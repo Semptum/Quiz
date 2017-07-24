@@ -2,12 +2,22 @@
 {% block content %}
 <body>
 <div align="center">
-    <form action = "/quiz/login/" method = "post">
+    <form action = "/quiz/signup/" method = "post">
     {% csrf_token %}
+    Nom :
+    <input type = "text" name = "last name"><br>
+    Prénom :
+    <input type = "text" name = "first name"><br>
     Nom d'utilisateur :
     <input type = "text" name = "username"><br>
     Mot de passe :
     <input type = "password" name = "password"><br>
+    Classe : <SELECT name = "classe" >
+    {% for nom in noms %}
+        <OPTION> {{ nom }}
+        {% endfor %}
+    <br>
+    </SELECT>
     <input type="submit" value="Confirmer"> <br>
 
 </form>
