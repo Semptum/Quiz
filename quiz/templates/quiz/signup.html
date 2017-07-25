@@ -12,7 +12,12 @@
     <input type = "text" name = "username"><br>
     Mot de passe :
     <input type = "password" name = "password"><br>
-    Classe : <SELECT name = "classe" >
+    Statut : <SELECT name = "statut">
+    <OPTION> "Eleve"
+    <OPTION> "Professeur"
+    </SELECT>
+    <br>
+        Classe : <SELECT name = "classe" >
     {% for nom in noms %}
         <OPTION> {{ nom }}
         {% endfor %}
