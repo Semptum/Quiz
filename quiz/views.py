@@ -1,4 +1,4 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.http import HttpResponse
 from passlib.hash import pbkdf2_sha256
 from quiz.models import *
@@ -31,14 +31,18 @@ def login(request):
         return render(request, 'quiz/login.html',{})
     user=request.POST['username']
     pswd=request.POST['password']
-    eleve=Eleves.objects.filter(username=user)
-    if len(eleve)==0:
+    statut = request.POST("statut")
+    if statut == "Eleve":
+        u=Eleves.objects.filter(username=u)
+    else:
+        u = Profs.objects.filter(username=u)
+    if len(u)==0:
         return HttpResponse("Compte inexistant")
-    hashed=eleve[0].password
+    hashed=u[0].password
     correct=pbkdf2_sha256.verify(pswd,hashed)
     if correct:
         request.session['username']=user
-        return HttpResponse("Logged in")
+        return redirect(dashboard)
     return HttpResponse("Mauvais mot de passe")
 
 def logout(request):
@@ -58,8 +62,14 @@ def signup(request):
     nom = request.POST['last name']
     prenom =request.POST['first name']
     classe = request.POST['classe']
+    statut = request.POST("statut")
     hashed=pbkdf2_sha256.encrypt(pswd, rounds=200000, salt_size=16)
-    t = Classes.objects.filter(nom = classe)
-    eleve = Eleves(nom = nom, prenom = prenom, password = hashed, username = user, idClasse = t[0] )
-    eleve.save()
-    return HttpResponse("Merci de votre inscription")
+    if statut == "Eleve":
+        t = Classes.objects.filter(nom = classe)
+        eleve = Eleves(nom = nom, prenom = prenom, password = hashed, username = user, idClasse = t[0] )
+        eleve.save()
+    else :
+        prof = Profs(nom = nom, prenom = prenom, password = hashed, username = user)
+        prof.save()
+    text = "Merci de votre inscription. Vous allez recevoir un email de confirmation vous permettant d'activer votre compte".
+    return HttpResponse(text)
