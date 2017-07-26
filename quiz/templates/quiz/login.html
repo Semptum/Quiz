@@ -4,10 +4,6 @@
 <div align="center">
     <form action = "/quiz/login/" method = "post">
     {% csrf_token %}
-        <SELECT name =  "statut">
-            <OPTION> Eleve
-            <OPTION> Professeur
-        </SELECT>
         Nom d'utilisateur :
     <input type = "text" name = "username"><br>
     Mot de passe :

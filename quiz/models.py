@@ -8,16 +8,17 @@ class Profs(models.Model):
     prenom=models.CharField(max_length=30)
     nom=models.CharField(max_length=30)
 
+class Classes(models.Model):
+    effectif = models.IntegerField()
+    idProf=models.ForeignKey(Profs)
+    nom=models.CharField(max_length=20)
 
 class Quizz(models.Model):
     quizz=models.URLField()
     correction=models.URLField()
     date = models.DateField()
-
-class Classes(models.Model):
-    effectif = models.IntegerField()
+    idClasse=models.ForeignKey(Classes)
     idProf=models.ForeignKey(Profs)
-    nom=models.CharField(max_length=20)
 
 class Eleves(models.Model):
     idClasse=models.ForeignKey(Classes)
