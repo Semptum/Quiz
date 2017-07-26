@@ -5,18 +5,10 @@ from quiz.models import *
 from django import forms
 import datetime
 
+from .Technique import *
+from .Eleves import *
+from .Profs import *
 
-class UploadFileForm(forms.Form):
-    file = forms.FileField()
-    corr = forms.FileField()
-    classe=forms.CharField(max_length=10)
-
-
-def msg(request,message):
-    return render(request,'quiz/message.html',{'msg':message})
-
-def televerser(file):
-    return "http://blaisepascal-prepa.forumactif.org/"
 
 # Create your views here.
 def index(request):
@@ -24,47 +16,12 @@ def index(request):
         return dashboard(request)
     return render(request, 'quiz/index.html', {})
 
+
 def available(request):
-    if not request.session.has_key('username'):
-        return render(request, 'quiz/index.html', {})
-    status=request.session['status']
-    if status=="prof":
-        prof=Profs.objects.get(username=request.session['username'])
-        QuizzsExistants=Quizz.objects.filter(idProf=prof)
-        L=[]
-        for q in QuizzsExistants:
-            classe=q.idClasse.nom
-            date=q.date
-            url=q.quizz
-            corr=q.correction
-            L+=["Quizz posé le "+str(date)+" a la classe "+classe+": "+url+" . Correction: "+corr]
-        if request.POST=={}:
-            form = UploadFileForm()
-            return render(request,'quiz/quizzes.html',{'quizzes':L,'form':form,'creer':True})
-        else:
-            form = UploadFileForm(request.POST, request.FILES)
-            url=televerser(request.POST['file'])
-            corr=televerser(request.POST['corr'])
-            classe=Classes.objects.get(nom=request.POST['classe'])
-            quizz=Quizz(quizz=url,correction=corr,idClasse=classe,idProf=prof)
-            quizz.save()
-            return msg(request,"Quizz rajouté")
-    eleve=Eleves.objects.filter(username=request.session['username'])[0]
-    classe=eleve.idClasse
-    QuizzsExistants=list(Quizz.objects.filter(idClasse=classe))
-    L = []
-    for q in QuizzsExistants:
-        classe = q.idClasse.nom
-        date = q.idClasse.date
-        url = q.idClasse.quizz
-        corr = q.idClasse.correction
-        L += ["Quizz posé le " + str(date) + " a la classe " + classe + ": " + url + " . Correction: " + corr]
-    return render(request, 'quiz/available.html', {'quizzes': L})
+    return profeleve(request,eleve_quizzes,prof_quizzes)
 
 def dashboard(request):
-    if request.session.has_key('username'):
-        return render(request, 'quiz/dashboard.html', {})
-    return render(request, 'quiz/index.html', {})
+    return profeleve(request,eleve_dashboard,prof_dashboard)
 
 def settings(request):
     if request.session.has_key('username'):
@@ -80,7 +37,6 @@ def login(request):
     pswd=request.POST['password']
     eleves=list(Eleves.objects.filter(username=user))
     profs=list(Profs.objects.filter(username=user))
-    print(profs)
     if len(eleves)!=0 and len(profs)==0:
         u=eleves[0]
         status="eleve"
@@ -114,16 +70,17 @@ def signup(request):
     pswd=request.POST['password']
     nom = request.POST['last name']
     prenom =request.POST['first name']
-    statut = request.POST['statut']
+    statut = str(request.POST['statut'])
     if statut=="Eleve":
         classe = request.POST['classe']
     deja=list(Profs.objects.filter(username=user))+list(Eleves.objects.filter(username=user))
+
     if deja!=[]:
         return render(request,'quiz/erreur.html',{'error':"Utilisateur deja existant"})
     hashed=pbkdf2_sha256.encrypt(pswd, rounds=200000, salt_size=16)
     if statut == "Eleve":
-        t = Classes.objects.filter(nom = classe)
-        eleve = Eleves(nom = nom, prenom = prenom, password = hashed, username = user, idClasse = t[0] )
+        t = Classes.objects.get(nom = classe)
+        eleve = Eleves(nom = nom, prenom = prenom, password = hashed, username = user, idClasse = t )
         eleve.save()
     else :
         prof = Profs(nom = nom, prenom = prenom, password = hashed, username = user)

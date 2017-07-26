@@ -2,6 +2,12 @@
 {% block content %}
 
 <body>
-Your dashboard
+{% if est_eleve %}
+{% for note in notes %}
+    Vous avez eu {{ notes }}<br>
+{% endfor %}
+{% endif %}
+
+
 </body>
 {% endblock %}

@@ -32,6 +32,7 @@ class Resultats(models.Model):
     idEleve=models.ForeignKey(Eleves)
     resultat=models.URLField()
 
+
 class Tags(models.Model):
     Tag = models.CharField(max_length= 20)
 
