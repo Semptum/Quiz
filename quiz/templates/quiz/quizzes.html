@@ -5,9 +5,15 @@
 Voici les quizzs deja crées:
 {% for q in quizzes %}
     {{ q }}<br>
-{% endfor %}
+{% endfor %}<br>
 
-Création de quizzs:
-
+{% if creer %}
+Création de quizz:<br>
+<form action="/quiz/available/" method="post">
+    {% csrf_token %}
+    {{ form }}
+    <input type="submit" value="Confirmer" />
+</form>
+{% endif %}
 </body>
 {% endblock %}

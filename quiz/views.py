@@ -2,10 +2,21 @@ from django.shortcuts import render, redirect
 from django.http import HttpResponse
 from passlib.hash import pbkdf2_sha256
 from quiz.models import *
+from django import forms
+import datetime
+
+
+class UploadFileForm(forms.Form):
+    file = forms.FileField()
+    corr = forms.FileField()
+    classe=forms.CharField(max_length=10)
+
 
 def msg(request,message):
     return render(request,'quiz/message.html',{'msg':message})
 
+def televerser(file):
+    return "http://blaisepascal-prepa.forumactif.org/"
 
 # Create your views here.
 def index(request):
@@ -23,11 +34,21 @@ def available(request):
         L=[]
         for q in QuizzsExistants:
             classe=q.idClasse.nom
-            date=q.idClasse.date
-            url=q.idClasse.quizz
-            corr=q.idClasse.correction
+            date=q.date
+            url=q.quizz
+            corr=q.correction
             L+=["Quizz posé le "+str(date)+" a la classe "+classe+": "+url+" . Correction: "+corr]
-        return render(request,'quiz/quizzes.html',{'quizzes':L})
+        if request.POST=={}:
+            form = UploadFileForm()
+            return render(request,'quiz/quizzes.html',{'quizzes':L,'form':form,'creer':True})
+        else:
+            form = UploadFileForm(request.POST, request.FILES)
+            url=televerser(request.POST['file'])
+            corr=televerser(request.POST['corr'])
+            classe=Classes.objects.get(nom=request.POST['classe'])
+            quizz=Quizz(quizz=url,correction=corr,idClasse=classe,idProf=prof)
+            quizz.save()
+            return msg(request,"Quizz rajouté")
     eleve=Eleves.objects.filter(username=request.session['username'])[0]
     classe=eleve.idClasse
     QuizzsExistants=list(Quizz.objects.filter(idClasse=classe))

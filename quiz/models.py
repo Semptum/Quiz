@@ -16,7 +16,7 @@ class Classes(models.Model):
 class Quizz(models.Model):
     quizz=models.URLField()
     correction=models.URLField()
-    date = models.DateField()
+    date = models.DateField(auto_now=True)
     idClasse=models.ForeignKey(Classes)
     idProf=models.ForeignKey(Profs)
 
