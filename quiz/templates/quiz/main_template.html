@@ -14,14 +14,22 @@
     <div class="navbar-header">
       <a class="navbar-brand" href="/quiz/index">Quiz website</a>
     </div>
-    <ul class="nav navbar-nav">
-      <li><a href="/quiz/dashboard">Dashboard</a></li>
-      <li><a href="/quiz/available">Available quizzes</a></li>
-      <li><a href="/quiz/settings">Settings</a></li>
+    {% if loginned %}
+      <ul class="nav navbar-nav">
+      <li{% if location == "Dashboard" %} class = "active" {% endif %}><a href="/quiz/dashboard">Dashboard</a></li>
+      <li{% if location == "Available" %} class = "active" {% endif %}><a href="/quiz/available">Available quizzes</a></li>
+      <li{% if location == "Settings" %} class = "active" {% endif %}><a href="/quiz/settings">Settings</a></li>
     </ul>
+    {% endif %}
       <ul class="nav navbar-nav navbar-right">
+          {% if not loginned %}
           <li><a href="/quiz/login"><span class="glyphicon glyphicon-log-in"></span> Login</a></li>
+          {% endif %}
+          {% if loginned %}
+          <li><a href="/quiz/logout"><span class="glyphicon glyphicon-log-out"></span> Logout</a></li>
+          {% endif %}
       </ul>
+
   </div>
 </nav>
 

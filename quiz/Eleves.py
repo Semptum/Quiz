@@ -24,7 +24,7 @@ def eleve_quizzes(request):
         url = q.quizz
         corr = q.correction
         L += ["Quizz posé le " + str(date) + " a la classe " + classe + ": " + url + " . Correction: " + corr]
-    return render(request, 'quiz/available.html', {'quizzes': L})
+    return render(request, 'quiz/available.html', {'quizzes': L,"loginned":True,"location":"Available"})
 
 
 def eleve_dashboard(request):
@@ -36,4 +36,5 @@ def eleve_dashboard(request):
     eleve=Eleves.objects.get(username=request.session['username'])
     resultats=Resultats.objects.filter(idEleve=eleve)
     Notes=[note(r) for r in resultats]
-    return render(request,'quiz/dashboard.html',{'est_eleve':True,'notes':Notes})
+    return render(request,'quiz/dashboard.html',{'est_eleve':True,'notes':Notes,"loginned":True,"location":"Dashboard"})
+

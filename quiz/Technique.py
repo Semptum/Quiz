@@ -11,14 +11,15 @@ class UploadFileForm(forms.Form):
     classe=forms.CharField(max_length=10)
 
 
-def msg(request,message):
+def msg(request,message,context={}):
     """
     Simple fonction qui affiche le message
     :param request:
     :param message:
     :return:
     """
-    return render(request,'quiz/message.html',{'msg':message})
+    context.update({'msg':message})
+    return render(request,'quiz/message.html',context)
 
 def televerser(file):
     """
@@ -52,7 +53,7 @@ def redirection(request,normal,defaut):
     :param defaut:
     :return:
     """
-    if request.session.has_key['username']:
+    if request.session.has_key('username'):
         return normal(request)
     return defaut(request)
 

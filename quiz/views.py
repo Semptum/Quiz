@@ -14,7 +14,7 @@ from .Profs import *
 def index(request):
     if request.session.has_key('username'):
         return dashboard(request)
-    return render(request, 'quiz/index.html', {})
+    return render(request, 'quiz/index.html', {"loginned": False})
 
 
 def available(request):
@@ -24,15 +24,15 @@ def dashboard(request):
     return profeleve(request,eleve_dashboard,prof_dashboard)
 
 def settings(request):
-    if request.session.has_key('username'):
-        return render(request, 'quiz/settings.html', {})
-    return index(request)
+    if not request.session.has_key('username'):
+        return index(request)
+    return render(request, 'quiz/settings.html', {"loginned": True})
 
 def login(request):
     if request.session.has_key('username'):
         return dashboard(request)
     if request.POST=={}:
-        return render(request, 'quiz/login.html',{})
+        return render(request, 'quiz/login.html',{"loginned":False})
     user=request.POST['username']
     pswd=request.POST['password']
     eleves=list(Eleves.objects.filter(username=user))
@@ -44,14 +44,14 @@ def login(request):
         u=profs[0]
         status="prof"
     else:
-        return msg(request,"Compte inexistant")
+        return msg(request,"Compte inexistant",{"loginned":False})
     hashed=u.password
     correct=pbkdf2_sha256.verify(pswd,hashed)
     if correct:
         request.session['username']=user
         request.session['status']=status
         return redirect(dashboard)
-    return msg(request,"Mauvais mot de passe")
+    return msg(request,"Mauvais mot de passe",{"loginned":False})
 
 def logout(request):
     try:
@@ -59,13 +59,13 @@ def logout(request):
         del request.session['status']
     except:
         pass
-    return render(request,'quiz/message.html')
+    return msg(request,"Vous avez été logouté",{"loginned":False})
 
 def signup(request):
     if request.POST=={}:
         L = Classes.objects.raw("SELECT id,Nom FROM quiz_classes")
         Noms = [i.Nom for i in L]
-        return render(request, 'quiz/signup.html', {"noms":Noms})
+        return render(request, 'quiz/signup.html', {"noms":Noms,"loginned":False})
     user=request.POST['username']
     pswd=request.POST['password']
     nom = request.POST['last name']
@@ -76,7 +76,7 @@ def signup(request):
     deja=list(Profs.objects.filter(username=user))+list(Eleves.objects.filter(username=user))
 
     if deja!=[]:
-        return render(request,'quiz/erreur.html',{'error':"Utilisateur deja existant"})
+        return render(request,'quiz/erreur.html',{'error':"Utilisateur deja existant","loginned":False})
     hashed=pbkdf2_sha256.encrypt(pswd, rounds=200000, salt_size=16)
     if statut == "Eleve":
         t = Classes.objects.get(nom = classe)
@@ -86,4 +86,10 @@ def signup(request):
         prof = Profs(nom = nom, prenom = prenom, password = hashed, username = user)
         prof.save()
     text = "Merci de votre inscription. Vous allez recevoir un email de confirmation vous permettant d'activer votre compte."
-    return msg(request,text)
+    return msg(request,text,{"loginned": False})
+
+def settings(request):
+    if not request.session.has_key('username'):
+        return index(request)
+    if request.POST=={}:
+        return render(request,'quiz/settings.html',{'form':"Une forme", 'location':"Settings","loginned":True})
