@@ -29,7 +29,7 @@ def televerser(request):
     """
     prof=Profs.objects.get(username=request.session['username'])
     classe=Classes.objects.get(nom=request.POST['classe'])
-    quizz=Quizz(quizz=request.FILES['quizz'],correction=request.FILES['corr'],date=datetime.date,idProf=prof,idClasse=classe)
+    quizz=Quizz(quizz=request.POST['quizz'],correction=request.POST['corr'],date=datetime.date,idProf=prof,idClasse=classe)
     quizz.save()
 
 

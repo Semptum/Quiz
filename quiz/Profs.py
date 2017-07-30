@@ -19,8 +19,8 @@ def prof_quizzes(request):
     for q in QuizzsExistants:
         classe = q.idClasse.nom
         date = q.date
-        url = q.quizz
-        corr = q.correction
+        url = q.quizz.url
+        corr = q.correction.url
         L += ["Quizz posé le " + str(date) + " a la classe " + classe + ": " + url + " . Correction: " + corr]
     if request.POST == {}:
         form = UploadFileForm()
