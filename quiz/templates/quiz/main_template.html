@@ -23,6 +23,7 @@
     {% endif %}
       <ul class="nav navbar-nav navbar-right">
           {% if not loginned %}
+          <li><a href="/quiz/signup"><span class="glyphicon glyphicon-record"></span> Signup</a></li>
           <li><a href="/quiz/login"><span class="glyphicon glyphicon-log-in"></span> Login</a></li>
           {% endif %}
           {% if loginned %}

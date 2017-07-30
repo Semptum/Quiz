@@ -26,12 +26,7 @@ def prof_quizzes(request):
         form = UploadFileForm()
         return render(request, 'quiz/quizzes.html', {'quizzes': L, 'form': form, 'creer': True,"loginned":True,"location":"Available"})
     else:
-        form = UploadFileForm(request.POST, request.FILES)
-        url = televerser(request.POST['file'])
-        corr = televerser(request.POST['corr'])
-        classe = Classes.objects.get(nom=request.POST['classe'])
-        quizz = Quizz(quizz=url, correction=corr, idClasse=classe, idProf=prof)
-        quizz.save()
+        televerser(request)
         return msg(request, "Quizz rajouté",{"loginned": True,"location":"Available"})
 
 def prof_dashboard(request):

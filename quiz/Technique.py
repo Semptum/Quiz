@@ -6,7 +6,7 @@ from django import forms
 import datetime
 
 class UploadFileForm(forms.Form):
-    file = forms.FileField()
+    quizz = forms.FileField()
     corr = forms.FileField()
     classe=forms.CharField(max_length=10)
 
@@ -21,13 +21,17 @@ def msg(request,message,context={}):
     context.update({'msg':message})
     return render(request,'quiz/message.html',context)
 
-def televerser(file):
+def televerser(request):
     """
     Fonction qui doit etre complétée. Elle doit renvoyer le lien vers l'endroit ou se trouve le fichier apres televersement
     :param file:
     :return:
     """
-    return "http://blaisepascal-prepa.forumactif.org/"
+    prof=Profs.objects.get(username=request.session['username'])
+    classe=Classes.objects.get(nom=request.POST['classe'])
+    quizz=Quizz(quizz=request.FILES['quizz'],correction=request.FILES['corr'],date=datetime.date,idProf=prof,idClasse=classe)
+    quizz.save()
+
 
 def profeleve(request,f_eleve,f_prof):
     """
