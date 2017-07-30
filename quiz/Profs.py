@@ -50,5 +50,5 @@ def prof_dashboard(request):
                 M+=note(r)
             M/=n
             Moyennes+=[M]
-        ResultatsDesEleves+={c.nom:Moyennes}
+        ResultatsDesEleves[c.nom] = Moyennes
     return msg(request,"Hello",{"loginned":True,"location":"Dashboard"})
