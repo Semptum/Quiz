@@ -12,7 +12,7 @@ def prof_settings(request):
     if request.POST != {}:
         nom = request.POST['nom']
         effectif = request.POST['effectif']
-        id = Profs.objets.get(username = request.sessions['username'])
+        id = Profs.objects.get(username = request.session['username'])
         C = Classes(effectif = effectif, idProf = id, nom = nom)
         C.save()
         msg = "Classe ajoutée."

@@ -5,6 +5,7 @@
 {% if prof %}
 Ajouter une classe: <br>
 <form action="quiz/settings" method="POST">
+{% csrf_token %}
 Nom : <input type = "text" name = "nom"> <br>
 Effectif : <input type = "int" name = "effectif"> <br>
 <input type = "submit" value = "Confirmer"> <br>
