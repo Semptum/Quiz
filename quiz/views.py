@@ -4,6 +4,7 @@ from passlib.hash import pbkdf2_sha256
 from quiz.models import *
 from django import forms
 import datetime
+import xml.etree.ElementTree as etree
 
 from .Technique import *
 from .Eleves import *
@@ -91,16 +92,34 @@ def signup(request):
 def passage(request,number):
     if not request.session.has_key('username'):
         return index(request)
-    today=datetime.datetime.now().date()
-    print(today)
-    n=int(number)
-    quiz=Quizz.objects.get(id=n)
-    print(quiz.date)
-    if quiz.date>today:
-        return msg(request,"Trop tôt")
-    q=quiz.quizz
-    q.open(mode='r')
-    S=""
-    for l in q:
-        S+=l+"\n"
-    return msg(request,S)
+    n = int(number)
+    quiz = Quizz.objects.get(id=n)
+    q = quiz.quizz
+    if request.POST=={}:
+        today = datetime.datetime.now().date()
+        if quiz.date > today:
+            return msg(request, "Trop tôt")
+        tree = etree.parse(q)
+        root = tree.getroot()
+        name_quiz = root.attrib['name']
+        Exam = []
+        i = 0
+        for question in root:
+            name = question.attrib['name']
+            type = question.attrib['type']
+            texte = question[0].text
+            Exam += [(name, type, texte, question,name.replace(" ",""))]
+        return render(request, 'quiz/passage.html', {"id": number, "quizz": Exam, "name": name_quiz, "loginned": True})
+    tree = etree.parse(q)
+    root = tree.getroot()
+    reponse=etree.Element('reponse',attrib={"name":root.attrib['name']})
+    for q in root:
+        type= q.attrib['type']
+        correct=False
+        if type=="QCM":
+            bonne=[r.text for r in q[1:] if r.attrib['bonne']=="True"][0].strip()
+            correct=(request.POST[q.attrib['name'].replace(" ","")]==bonne)
+            print(correct)
+    return msg(request,"Merci d'avoir passé le quizz.")
+    #Structure : (Question,[Reponses],bonne)
+    

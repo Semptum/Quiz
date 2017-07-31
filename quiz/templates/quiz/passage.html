@@ -1,0 +1,33 @@
+{% extends "./main_template.html" %}
+{% block content %}
+
+<body>
+{{ name }}<br>
+<div align="center">
+<form action={{ id }} method="POST">
+{% csrf_token %}
+<ol>
+{% for question in quizz%}
+    <fieldset id={{ question.0 }}>
+    <li><b>{{ question.0 }}</b><br>
+    <i>{{ question.2 }}</i><br>
+    {% if question.1 == "QCM"%}
+        {% for r in question.3 %}
+            {% if r.tag != "content" %}
+            <input type="radio" name={{question.4}} value={{ r.text }}>{{ r.text }} |
+            {% endif %}
+        {% endfor %}
+    {% endif %}
+    {% if question.1 == "Number" %}
+        <input type="text" name={{ question.4 }} value={{ question.3.1.text }}>
+    {% endif %}
+    </li>
+    </fieldset>
+{% endfor %}
+</ol>
+    <input type="submit" value="Confirmer">
+</form>
+</div>
+
+</body>
+{% endblock %}
