@@ -2,6 +2,12 @@
 {% block content %}
 
 <body>
-Settings
+{% if prof %}
+Ajouter une classe: <br>
+Nom : <input type = "text" name = "nom"> <br>
+Effectif : <input type = "int" name = "effectif"> <br>
+<input type = "submit" value = "Confirmer"> <br>
+{{ msg }}
+{% endif %}
 </body>
 {% endblock %}

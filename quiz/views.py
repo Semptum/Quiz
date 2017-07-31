@@ -26,7 +26,7 @@ def dashboard(request):
 def settings(request):
     if not request.session.has_key('username'):
         return index(request)
-    return render(request, 'quiz/settings.html', {"loginned": True})
+    return profeleve(request, eleve_settings, prof_settings)
 
 def login(request):
     if request.session.has_key('username'):

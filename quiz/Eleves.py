@@ -6,6 +6,10 @@ from django import forms
 import datetime
 from .Technique import *
 
+def eleves_settings(request):
+    return render(request, 'quiz/settings.html', {"loginned":True,"prof":False})
+
+
 def eleve_quizzes(request):
     """
     Fonction qui affiche la page des quizzs de l'eleve. Elle doit lui montrer les quizzs deja faits et

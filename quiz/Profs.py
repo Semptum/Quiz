@@ -7,6 +7,17 @@ import datetime
 from .Technique import *
 
 
+def prof_settings(request):
+    msg = ""
+    if request.POST != {}:
+        nom = request.POST['nom']
+        effectif = request.POST['effectif']
+        id = Profs.objets.get(username = request.sessions['username'])
+        C = Classes(effectif = effectif, idProf = id, nom = nom)
+        C.save()
+        msg = "Classe ajoutée."
+    return render(request, 'quiz/settings.html', {"loginned" : True, "prof": True, "msg":msg})
+
 def prof_quizzes(request):
     """
     Doit afficher la liste des quizzs de ce prof ainsi que la possibilité de créer des quizzs.
