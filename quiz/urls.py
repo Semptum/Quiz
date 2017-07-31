@@ -9,5 +9,6 @@ urlpatterns = [
     url(r'^index/', views.index, name = "index"),
     url(r'^signup/', views.signup, name="signup"),
     url(r'^logout/', views.logout, name="logout"),
+    url(r'^passage/([0-9])',views.passage,name="passage"),
     url(r'^$', views.index, name = "index"),
 ]

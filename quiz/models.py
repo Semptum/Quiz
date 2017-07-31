@@ -14,8 +14,8 @@ class Classes(models.Model):
     nom=models.CharField(max_length=20)
 
 class Quizz(models.Model):
-    quizz=models.FileField(upload_to='quizzes/')
-    correction=models.FileField(upload_to='corrections/')
+    quizz=models.FileField(upload_to='quiz/uploads/quizzes/')
+    correction=models.FileField(upload_to='quiz/uploads/corrections/')
     date = models.DateField(auto_now=True)
     idClasse=models.ForeignKey(Classes)
     idProf=models.ForeignKey(Profs)
@@ -30,7 +30,7 @@ class Eleves(models.Model):
 class Resultats(models.Model):
     idQuizz=models.ForeignKey(Quizz)
     idEleve=models.ForeignKey(Eleves)
-    resultat=models.FileField(upload_to='resultats/')
+    resultat=models.FileField(upload_to='quiz/uploads/resultats/')
 
 
 class Tags(models.Model):

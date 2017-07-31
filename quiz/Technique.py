@@ -11,7 +11,7 @@ class UploadFileForm(forms.Form):
     classe=forms.CharField(max_length=10)
 
 
-def msg(request,message,context={}):
+def msg(request,message,context={"loginned":True}):
     """
     Simple fonction qui affiche le message
     :param request:
@@ -21,7 +21,7 @@ def msg(request,message,context={}):
     context.update({'msg':message})
     return render(request,'quiz/message.html',context)
 
-def televerser(request):
+def televerser_quizz(request):
     """
     Fonction qui doit etre complétée. Elle doit renvoyer le lien vers l'endroit ou se trouve le fichier apres televersement
     :param file:
@@ -29,7 +29,7 @@ def televerser(request):
     """
     prof=Profs.objects.get(username=request.session['username'])
     classe=Classes.objects.get(nom=request.POST['classe'])
-    quizz=Quizz(quizz=request.POST['quizz'],correction=request.POST['corr'],date=datetime.date,idProf=prof,idClasse=classe)
+    quizz=Quizz(quizz=request.FILES['quizz'],correction=request.FILES['corr'],date=datetime.datetime.now(),idProf=prof,idClasse=classe)
     quizz.save()
 
 
@@ -68,3 +68,4 @@ def note(resultat):
     :return:
     """
     return 11.5
+

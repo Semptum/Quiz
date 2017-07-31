@@ -88,3 +88,19 @@ def signup(request):
     text = "Merci de votre inscription. Vous allez recevoir un email de confirmation vous permettant d'activer votre compte."
     return msg(request,text,{"loginned": False})
 
+def passage(request,number):
+    if not request.session.has_key('username'):
+        return index(request)
+    today=datetime.datetime.now().date()
+    print(today)
+    n=int(number)
+    quiz=Quizz.objects.get(id=n)
+    print(quiz.date)
+    if quiz.date>today:
+        return msg(request,"Trop tôt")
+    q=quiz.quizz
+    q.open(mode='r')
+    S=""
+    for l in q:
+        S+=l+"\n"
+    return msg(request,S)

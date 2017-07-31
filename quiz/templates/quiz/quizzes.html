@@ -3,17 +3,24 @@
 
 <body>
 Voici les quizz deja créés:
+<ul>
 {% for q in quizzes %}
-    {{ q }}<br>
+    <li>
+        Quiz posé a la classe {{ q.0 }}, le {{ q.1 }}: <a href={{ q.2 }}> ici</a>
+    </li>
 {% endfor %}<br>
+</ul>
 
 {% if creer %}
+
+<div align="center" >
 Création de quizz:<br>
-<form action="/quiz/available/" method="post">
+    <form action="/quiz/available/" method="post" enctype="multipart/form-data">
     {% csrf_token %}
     {{ form }}
     <input type="submit" value="Confirmer" />
 </form>
+</div>
 {% endif %}
 </body>
 {% endblock %}

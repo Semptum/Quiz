@@ -30,17 +30,14 @@ def prof_quizzes(request):
     for q in QuizzsExistants:
         classe = q.idClasse.nom
         date = q.date
-        url = q.quizz.url
-        a=q.quizz.open()
-        for l in a:
-            print(l)
+        url = "/quiz/passage/"+str(q.id)
         corr = q.correction.url
-        L += ["Quizz posé le " + str(date) + " a la classe " + classe + ": " + url + " . Correction: " + corr]
+        L += [(classe,date,url)]
     if request.POST == {}:
         form = UploadFileForm()
         return render(request, 'quiz/quizzes.html', {'quizzes': L, 'form': form, 'creer': True,"loginned":True,"location":"Available"})
     else:
-        televerser(request)
+        televerser_quizz(request)
         return msg(request, "Quizz rajouté",{"loginned": True,"location":"Available"})
 
 def prof_dashboard(request):
