@@ -88,8 +88,3 @@ def signup(request):
     text = "Merci de votre inscription. Vous allez recevoir un email de confirmation vous permettant d'activer votre compte."
     return msg(request,text,{"loginned": False})
 
-def settings(request):
-    if not request.session.has_key('username'):
-        return index(request)
-    if request.POST=={}:
-        return render(request,'quiz/settings.html',{'form':"Une forme", 'location':"Settings","loginned":True})

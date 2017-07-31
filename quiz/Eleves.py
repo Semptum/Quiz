@@ -6,7 +6,7 @@ from django import forms
 import datetime
 from .Technique import *
 
-def eleves_settings(request):
+def eleve_settings(request):
     return render(request, 'quiz/settings.html', {"loginned":True,"prof":False})
 
 

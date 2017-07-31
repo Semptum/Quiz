@@ -31,6 +31,9 @@ def prof_quizzes(request):
         classe = q.idClasse.nom
         date = q.date
         url = q.quizz.url
+        a=q.quizz.open()
+        for l in a:
+            print(l)
         corr = q.correction.url
         L += ["Quizz posé le " + str(date) + " a la classe " + classe + ": " + url + " . Correction: " + corr]
     if request.POST == {}:
