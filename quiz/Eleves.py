@@ -25,9 +25,9 @@ def eleve_quizzes(request):
     for q in QuizzsExistants:
         classe = q.idClasse.nom
         date = q.date
-        url = q.quizz
-        corr = q.correction
-        L += ["Quizz posé le " + str(date) + " a la classe " + classe + ": " + url + " . Correction: " + corr]
+        url = "/quiz/passage/"+str(q.id)
+        corr = q.correction.url
+        L += [(classe, date, url)]
     return render(request, 'quiz/available.html', {'quizzes': L,"loginned":True,"location":"Available"})
 
 

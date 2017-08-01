@@ -30,7 +30,7 @@ def prof_quizzes(request):
     for q in QuizzsExistants:
         classe = q.idClasse.nom
         date = q.date
-        url = "/quiz/passage/"+str(q.id)
+        url = "#"
         corr = q.correction.url
         L += [(classe,date,url)]
     if request.POST == {}:

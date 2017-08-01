@@ -4,8 +4,10 @@ from passlib.hash import pbkdf2_sha256
 from quiz.models import *
 from django import forms
 import datetime
-import xml.etree.ElementTree as etree
-
+from django.core.files import File
+from django.core.files.base import ContentFile
+import lxml.etree as etree
+import io
 from .Technique import *
 from .Eleves import *
 from .Profs import *
@@ -119,7 +121,18 @@ def passage(request,number):
         if type=="QCM":
             bonne=[r.text for r in q[1:] if r.attrib['bonne']=="True"][0].strip()
             correct=(request.POST[q.attrib['name'].replace(" ","")]==bonne)
-            print(correct)
-    return msg(request,"Merci d'avoir passé le quizz.")
+            r=etree.SubElement(reponse,"answer",attrib={"type":"QCM"})
+            r.text=str(correct)
+        if type=="Number":
+            bonne=q[1].attrib["correct"]
+            correct=(request.POST[q.attrib['name'].replace(" ","")]==bonne)
+            r=etree.SubElement(reponse,"answer",attrib={"type":"Number"})
+            r.text=str(correct)
+    XML=etree.tostring(reponse,pretty_print=True)
+    if request.session['status']=="eleve":
+        eleve=Eleves.objects.get(username=request.session['username'])
+        Resultat = Resultats(idQuizz=quiz, idEleve=eleve, resultat=ContentFile(XML))
+        Resultat.save()
+    return msg(request,XML,{"loginned":True})
     #Structure : (Question,[Reponses],bonne)
     

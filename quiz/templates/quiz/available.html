@@ -2,10 +2,14 @@
 {% block content %}
 
 <body>
-Voici les quizzs qui vous sont accessibles:
+Quizzs qui vous sotn accessibles: <br>
+<ul>
 {% for q in quizzes %}
-    {{ q }}<br>
-{% endfor %}
+    <li>
+        Quiz posé a la classe {{ q.0 }}, le {{ q.1 }}: <a href={{ q.2 }}> ici</a>
+    </li>
+{% endfor %}<br>
+</ul>
 
 </body>
 {% endblock %}
